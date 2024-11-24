@@ -16,7 +16,12 @@ urlpatterns = [
         auth_views.PasswordChangeView.as_view(),
         name='password_change'
     ),
+    path(
+        'password-change/done/',
+        auth_views.PasswordResetDoneView.as_view(),
+        name='password_change_done'
+    ),
 
     # site urls
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('', views.dashboard, name='dashboard'),
 ]   
