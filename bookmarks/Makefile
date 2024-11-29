@@ -7,6 +7,9 @@ makemigrations:
 runserver:
 	python3 manage.py runserver
 
+runserver-plus:
+	python3 manage.py runserver_plus --cert-file cert.crt
+
 start: migrate runserver
 
 shell:
