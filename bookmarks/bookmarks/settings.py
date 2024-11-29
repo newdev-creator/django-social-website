@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 #from threading import local
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -138,5 +139,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 AUTHENTICATION_BACKEND = [
     'django.contrib.auth.backend.ModelBackend',
-    'account.authentication.EmailAuthBackend'
+    'account.authentication.EmailAuthBackend',
+    'social_core.backends.google.GoogleOAuth2',
 ]
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_OAUTH_SECRET')
