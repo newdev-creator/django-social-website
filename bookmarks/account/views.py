@@ -1,12 +1,12 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, get_user_model, login
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 from .form import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
 from .models import Profile
 
-
+User = get_user_model()
 
 def user_login(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':

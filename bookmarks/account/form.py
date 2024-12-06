@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from .models import Profile
 
-# User = get_user_model()
+User = get_user_model()
 
 class LoginForm(forms.Form):
     username = forms.CharField()
@@ -43,16 +43,23 @@ class UserEditForm(forms.ModelForm):
         model = get_user_model()
         fields = ('username', 'first_name', 'last_name', 'email')
 
+    # def clean_email(self):
+    #     data = self.cleaned_data['email']
+    #     qs = User.objects.exclude(
+    #         id=self.instance.exclude.id
+    #     ).filter(
+    #         email=data
+    #     )
+    #     if qs.exists():
+    #         raise forms.ValidationError('Email already in use.')
+    #     return data
     def clean_email(self):
-        data = self.cleaned_data['email']
-        qs = User.objects.exclude(
-            id=self.instance.exclude.id
-        ).filter(
-            email=data
-        )
-        if qs.exists():
-            raise forms.ValidationError('Email already in use.')
-        return data
+        email = self.cleaned_data['email']
+        # Check if the email is already in use by another user
+        users_with_email = User.objects.filter(email=email).exclude(pk=self.instance.pk)
+        if users_with_email.exists():
+            raise forms.ValidationError('A user with this email already exists.')
+        return email
 
 
 
