@@ -1,21 +1,22 @@
-migrate:
+mi:
 	python3 manage.py migrate
 
-makemigrations:
+mm:
 	python3 manage.py makemigrations
 
-runserver:
+rs:
 	python3 manage.py runserver
 
-runserver-plus:
+rsp:
 	python3 manage.py runserver_plus --cert-file cert.crt
 
-start: migrate runserver
+st:
+	migrate runserver
 
-shell:
+sh:
 	python3 manage.py shell
 
-dumpdata:
+dd:
 	python3 manage.py dumpdata --indent=2 --output=mysite_data.json
 
 test:
