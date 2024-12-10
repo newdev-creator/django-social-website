@@ -1,4 +1,3 @@
-from hmac import new  # Import inutilisé ici, peut probablement être supprimé
 from django.contrib import messages  # Permet d'afficher des messages temporaires à l'utilisateur
 from django.contrib.auth.decorators import login_required  # Décorateur pour restreindre l'accès aux utilisateurs connectés
 from django.shortcuts import redirect, render  # Utilisé pour rediriger ou rendre des templates HTML

@@ -1,8 +1,9 @@
-from django import forms
-from .models import Image  # Importation du modèle Image depuis vos modèles
 import requests  # Module pour effectuer des requêtes HTTP (utile pour télécharger une image à partir d'une URL)
+from django import forms
 from django.core.files.base import ContentFile  # Utilisé pour traiter le contenu binaire des fichiers
 from django.utils.text import slugify  # Convertit les chaînes de caractères en un format "slugifié" (URL-friendly)
+
+from .models import Image  # Importation du modèle Image depuis vos modèles
 
 # Définition d'un formulaire pour créer une instance du modèle Image
 class ImageCreateForm(forms.ModelForm):
@@ -21,7 +22,7 @@ class ImageCreateForm(forms.ModelForm):
         # Récupère la valeur du champ 'url' nettoyé (cleaned_data contient les données valides)
         url = self.cleaned_data['url']
         # Liste des extensions valides pour les images
-        valid_extensions = ['.jpg', '.jpeg', '.png']
+        valid_extensions = ['jpg', 'jpeg', 'png']
         # Récupère l'extension du fichier en divisant l'URL à partir du dernier point
         extension = url.rsplit('.', 1)[1].lower()
         # Vérifie si l'extension est valide
@@ -49,7 +50,7 @@ class ImageCreateForm(forms.ModelForm):
         image.image.save(
             image_name,  # Nom du fichier de l'image
             ContentFile(response.content),  # Contenu binaire de l'image téléchargée
-            save=True  # Enregistre immédiatement le fichier
+            save=False  # N'enregistre pas immédiatement le fichier
         )
         # Si `commit` est True, enregistre l'objet dans la base de données
         if commit:
