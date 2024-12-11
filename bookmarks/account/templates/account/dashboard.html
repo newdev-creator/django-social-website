@@ -1,8 +1,39 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
+<!-- Hérite du fichier `base.html`, ce qui permet de réutiliser le design global de votre site -->
 
-{% block title %}Dashboard{% endblock title %}
+{% block title %}Dashboard{% endblock %}
+<!-- Définit le titre de la page, qui sera inséré dans le bloc `title` du template parent -->
 
 {% block content %}
-    <h1>Dashboard</h1>
-    <p>Welcome to your Dashboard.</p>
-{% endblock content %}
+  <!-- Début du bloc `content` pour le contenu principal de la page -->
+  <h1>Dashboard</h1>
+  
+  {% with total_images_created=request.user.images_created.count %}
+  <!-- Utilisation du tag `with` pour définir une variable locale -->
+    <p>
+      Welcome to your dashboard. 
+      You have bookmarked {{ total_images_created }} image{{ total_images_created|pluralize }}.
+      <!-- Affiche le nombre total d'images créées par l'utilisateur connecté.
+           Utilise le filtre `pluralize` pour gérer le pluriel correctement en anglais :
+           - Ajoute un "s" si le nombre est différent de 1 -->
+    </p>
+  {% endwith %}
+  
+  <p>
+    Drag the following button to your bookmarks toolbar to bookmark images from other websites →
+    <!-- Guide l'utilisateur pour ajouter un bookmarklet à sa barre de favoris -->
+    <a href="javascript:{% include "bookmarklet_launcher.js" %}" class="button">Bookmark it</a>
+    <!-- Le lien `href` contient du JavaScript généré par le fichier `bookmarklet_launcher.js`,
+         qui est inclus directement dans ce template -->
+  </p>
+  
+  <p>
+    You can also 
+    <a href="{% url "edit" %}">edit your profile</a>
+    <!-- Lien vers la page d'édition du profil de l'utilisateur -->
+    or 
+    <a href="{% url "password_change" %}">change your password</a>.
+    <!-- Lien vers la page de changement de mot de passe -->
+  </p>
+{% endblock %}
+<!-- Fin du bloc `content` -->
