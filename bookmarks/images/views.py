@@ -1,9 +1,11 @@
 from django.contrib import messages  # Permet d'afficher des messages temporaires à l'utilisateur
 from django.contrib.auth.decorators import login_required  # Décorateur pour restreindre l'accès aux utilisateurs connectés
+from django.http import HttpResponse  # Permet d'envoyer des réponses HTTP
 from django.shortcuts import redirect, render  # Utilisé pour rediriger ou rendre des templates HTML
+from django.shortcuts import get_object_or_404  # Permet d'accéder à une instance d'objet
 
 from .forms import ImageCreateForm  # Formulaire pour créer une instance du modèle Image
-
+from .models import Image  # Importe le modèle Image
 
 # Vue pour permettre aux utilisateurs de créer une nouvelle image
 @login_required  # Assure que seuls les utilisateurs connectés peuvent accéder à cette vue
@@ -35,6 +37,17 @@ def image_create(request):
         request,  # Objet de requête
         'images/image/create.html',  # Template utilisé pour afficher la page de création
         {'form': form}  # Contexte contenant le formulaire
+    )
+
+def image_detail(request,id: int, slug: str) -> HttpResponse:
+    """
+    Vue pour afficher les détails d'une image donnée.
+    """
+    image = get_object_or_404(Image, id=id, slug=slug)  # Recherche de l'image avec l'ID et le slug
+    return render(
+        request,  # Objet de requête
+        'images/image/detail.html',  # Template utilisé pour afficher la page de détail
+        {'section': 'images', 'image': image}  # Contexte contenant l'image
     )
 
 

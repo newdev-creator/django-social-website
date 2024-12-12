@@ -2,6 +2,7 @@ from typing import Any  # Pour typage générique
 from django.conf import settings  # Accès aux paramètres du projet (ex. AUTH_USER_MODEL)
 from django.utils.text import slugify  # Fonction pour générer des slugs à partir de chaînes de caractères
 from django.db import models  # Base pour tous les modèles Django
+from django.urls import reverse  # Permet d'accéder aux URLs
 
 
 class Image(models.Model):
@@ -47,6 +48,12 @@ class Image(models.Model):
         if not self.slug:  # Si aucun slug n'est défini
             self.slug = slugify(self.title)  # Génère un slug à partir du titre
         super().save(*args, **kwargs)  # Appelle la méthode save() de la classe parente
+
+    def get_absolute_url(self) -> str:
+        """
+        Retourne l'URL absolue pour cette image.
+        """
+        return reverse('images:detail', args=[self.id, self.slug])  # Retourne l'URL absolue pour cette image
 
 """
 ### Changements et annotations ajoutées :
