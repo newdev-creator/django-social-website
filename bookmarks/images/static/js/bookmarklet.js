@@ -1,4 +1,4 @@
-const siteUrl = '//mysite.com:8000';
+const siteUrl = '//mysite.com:8000/';
 const styleUrl = siteUrl + '/static/css/bookmarklet.css';
 const minWidth = 300;
 const minHeight = 300;
@@ -22,8 +22,8 @@ boxHtml = `
 body.innerHTML += boxHtml;
 
 function bookmarkletLaunch() {
-    bookmarlet = document.getElementById('bookmarklet');
-    const imagesFound = bookmarklet.querySelector('images');
+    bookmarklet = document.getElementById('bookmarklet');
+    const imagesFound = bookmarklet.querySelector('.images');
 
     // clear images found
     imagesFound.innerHTML = '';
@@ -39,12 +39,26 @@ function bookmarkletLaunch() {
     // find images in the DOM with the minimum dimensions
     images = document.querySelectorAll('img[src$=".jpg"], img[src$=".jpeg"], img[src$=".png"]');
     images.forEach(image => {
-        if (image.naturalWidth >=minWidth && image.naturalHeight >= minHeight) {
+        if (image.naturalWidth >= minWidth && image.naturalHeight >= minHeight) {
             const imageFound = document.createElement('img');
             imageFound.src = image.src;
-            imageFound.append(imageFound);
+            imagesFound.append(imageFound);
         }
     });
+
+    // select image event
+    imagesFound.querySelectorAll('img').forEach(image => {
+        image.addEventListener('click', function(e){
+            imagesSelected = e.target;
+            bookmarklet.style.display = 'none';
+            window.open(siteUrl + 'images/create/?url=' 
+                + encodeURIComponent(imagesSelected.src)
+                + '&title='
+                + encodeURIComponent(document.title),
+                '_blank'
+            );
+        })
+    })
 }
 
 // launch the bookmarklet
