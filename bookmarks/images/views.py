@@ -1,8 +1,9 @@
 from django.contrib import messages  # Permet d'afficher des messages temporaires à l'utilisateur
 from django.contrib.auth.decorators import login_required  # Décorateur pour restreindre l'accès aux utilisateurs connectés
-from django.http import HttpResponse  # Permet d'envoyer des réponses HTTP
+from django.http import HttpResponse, HttpRequest, JsonResponse  # Permet d'envoyer des réponses HTTP et JSON
 from django.shortcuts import redirect, render  # Utilisé pour rediriger ou rendre des templates HTML
 from django.shortcuts import get_object_or_404  # Permet d'accéder à une instance d'objet
+from django.views.decorators.http import require_POST  # Décorateur pour vérifier si la requête est de type POST
 
 from .forms import ImageCreateForm  # Formulaire pour créer une instance du modèle Image
 from .models import Image  # Importe le modèle Image
@@ -49,6 +50,23 @@ def image_detail(request,id: int, slug: str) -> HttpResponse:
         'images/image/detail.html',  # Template utilisé pour afficher la page de détail
         {'section': 'images', 'image': image}  # Contexte contenant l'image
     )
+
+@login_required
+@require_POST
+def image_like(request: HttpRequest) -> HttpResponse:
+    image_id = request.POST.get('id')
+    action = request.POST.get('action')
+    if image_id and action:
+        try:
+            image = Image.objects.get(id=image_id)
+            if action == 'like':
+                image.user_like.add(request.user)
+            else:
+                image.user_like.remove(request.user)
+            return JsonResponse({'status': 'ok'})
+        except Image.DoesNotExist:
+            pass
+    return JsonResponse({'status': 'error'})
 
 
 """
